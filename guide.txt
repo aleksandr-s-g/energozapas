@@ -1,0 +1,72 @@
+Автор работы: Гаврилов Александр
+8953888421
+
+Установка окружения и запуск dev-серверов тестового задания на должность инженер-программист компании Энергозапас
+
+Установка, запуск и настройка серверной части базы данных
+
+Для начала установите необходимые пакеты, для этого откройте терминал и введите команды по очереди (в зависимости от настроек вашей ОС может потребоваться добавить sudo перед командами):
+apt update
+apt install sudo git python3-pip python3-dev npm mariadb-server git libmariadb-dev build-essential
+Далее создайте папку и переместитесь в нее.
+mkdir gavrilov
+cd gavrilov
+Займемся установкой и настройкой сервера баз данных, для этого введите следующую команду и следуйте командам установщика.
+sudo mysql_secure_installation
+Во время установки я создал пользователя root, если вы создали пользователя с другим именем, подставьте его в команду:
+sudo -u root mysql
+Вы должны попасть в интерфейс СУБД, дальше создайте базу данных и сконфигурируйте ее для работы с приложением.
+CREATE DATABASE energozapas DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+CREATE USER 'django'@'localhost' IDENTIFIED BY 'django_password';
+GRANT ALL PRIVILEGES ON energozapas.* TO 'django'@'localhost';
+FLUSH PRIVILEGES;
+exit;
+Если вы по каким-то причинам изменили в этом запросе название базы, пользователя или пароль, в дальнейшем замените эти данные в файле
+settings.py
+настроек django, а именно в объекте
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'energozapas',
+        'USER': 'django',
+        'PASSWORD': 'django_password',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
+Установите виртуальное окружение.
+sudo -H pip3 install virtualenv
+Клонируйте репозиторий с кодом.
+git clone https://github.com/aleksandr-s-g/energozapas
+Перейдите в папку проекта.
+cd energozapas/
+Создайте и зайдите в виртуальное окружение (чтобы выйти из него, введите команду deactivate)
+virtualenv venv
+source venv/bin/activate
+Установите django и необходимые пакеты.
+pip install django djangorestframework xlwt django-cors-headers mysqlclient  
+Создайте структуру моделей из проекта в базе.
+energozapas_api/manage.py makemigrations
+energozapas_api/manage.py migrate
+Создайте суперюзера.
+energozapas_api/manage.py createsuperuser
+Попробуйте запустить сервер (если ваш порт 8080 занят, подставьте любой свободный)
+energozapas_api/manage.py runserver 0.0.0.0:8080
+Проверьте работу сервера, для этого перейдите по ссылке (не забудьте подставить порт, который указывали при запуске)
+http://127.0.0.1:8080/admin
+Введите логин и пароль, который указывали при создании суперюзера. Если все шаги выполнены без ошибок, вы должны попасть на страницу администрирования django. Если это произошло, оставьте это окно терминала работать и перейдите к следующим шагам.
+
+Установка, запуск и настройка клиентской части
+
+Откройте новый терминал, перейдите в папку проекта.
+cd gavrilov/energozapas/energozapas_front_dev/
+Установите необходимые пакеты и зависимости.
+npm install react-select
+Далее, если вы запустили серверную часть на порте, отличном от 8080, замените порт в строке
+const server_port = '8080'
+файла src/App.js
+Далее запустите dev сервер клиентской части командой:
+npm start
+По умолчанию он запускается на порте 3000, если он занят, номер порта автоматически заменится на свободный. После запуска сервера в консоли появится сообщение об адресе, по которому доступен сервер. В моем случае, это  
+http://localhost:3000
+Перейдя по адресу, вы можете пользоваться приложением.
