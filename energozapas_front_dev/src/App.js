@@ -37,14 +37,16 @@ const styles = {
     borderRadius: '15px'
   }
 }
-const server_get_staff_api_url = 'http://195.161.114.11:8080/api/stuff/?format=json'
-const server_staff_api_url = 'http://195.161.114.11:8080/api/stuff/'
-const server_staff_export_api_url = 'http://195.161.114.11:8080/api/stuff/export/'
-const server_get_positions_api_url = 'http://195.161.114.11:8080/api/stuff/position/?format=json'
-const server_positions_api_url = 'http://195.161.114.11:8080/api/stuff/position/'
+const server_hostname = window.location.hostname
+const server_port = '8080'
+const server_get_staff_api_url = 'http://'+server_hostname+':'+server_port+'/api/stuff/?format=json'
+const server_staff_api_url = 'http://'+server_hostname+':'+server_port+'/api/stuff/'
+const server_staff_export_api_url = 'http://'+server_hostname+':'+server_port+'/api/stuff/export/'
+const server_get_positions_api_url = 'http://'+server_hostname+':'+server_port+'/api/stuff/position/?format=json'
+const server_positions_api_url = 'http://'+server_hostname+':'+server_port+'/api/stuff/position/'
 
-const server_get_departments_api_url = 'http://195.161.114.11:8080/api/stuff/department/?format=json'
-const server_departments_api_url = 'http://195.161.114.11:8080/api/stuff/department/'
+const server_get_departments_api_url = 'http://'+server_hostname+':'+server_port+'/api/stuff/department/?format=json'
+const server_departments_api_url = 'http://'+server_hostname+':'+server_port+'/api/stuff/department/'
 
 const staff_sort_options = [
   { value: 'first_name', label: 'Сортировка по имени' },
